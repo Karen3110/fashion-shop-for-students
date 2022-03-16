@@ -35,8 +35,7 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Image> img;
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Image image;
+
+
 
 }
