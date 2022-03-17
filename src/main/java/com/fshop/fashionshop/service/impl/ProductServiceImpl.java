@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -54,13 +55,40 @@ public class ProductServiceImpl implements ProductService {
                 .findAll();
     }
 
+    /***
+     *
+     * @param id is related to product which need to update
+     * @param product is changed data
+     * @returns just updated product
+     */
+
+    @Transactional
     @Override
-    public Product update(long id, Object product) {
-        return null;
+    public Product update(long id, Product product) {
+        Product fromDb = productRepository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "product with id:" + id + "  not found in database")
+                );
+        fromDb.setName(product.getName());
+        fromDb.setPrice(product.getPrice());
+        fromDb.setCurrency(product.getCurrency());
+        fromDb.setDescription(product.getDescription());
+        fromDb.setStock(product.getStock());
+        return fromDb;
     }
+
+    /**
+     * @param id need to delete
+     *           after deleting product from table,
+     *           it automatically deletes all related information from other tables
+     */
 
     @Override
     public void delete(long id) {
-
+        productRepository.deleteById(id);
     }
+
+
 }

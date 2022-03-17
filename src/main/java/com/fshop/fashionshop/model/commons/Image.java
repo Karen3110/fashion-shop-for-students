@@ -1,12 +1,16 @@
 package com.fshop.fashionshop.model.commons;
 
-import com.fshop.fashionshop.model.Product;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
+@RequiredArgsConstructor
 @ToString
 @Entity
 public class Image {
@@ -17,4 +21,7 @@ public class Image {
     private String imagePath;
 
 
+    public Image(String s) {
+        this.imagePath = s;
+    }
 }
