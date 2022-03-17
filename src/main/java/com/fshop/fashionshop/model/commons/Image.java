@@ -16,6 +16,5 @@ public class Image {
 
     private String imagePath;
 
-    @ManyToOne
-    private Product product;
+
 }
