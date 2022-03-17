@@ -1,10 +1,18 @@
 package com.fshop.fashionshop.service;
 
 import com.fshop.fashionshop.model.Product;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 public interface ProductService {
 
-    Product getByID(long id) ;
+    Product create(Product product);
 
+    Product getById(long id);
+
+    List<Product> getAll();
+
+    Product update(long id, Object product);
+
+    void delete(long id);
 }

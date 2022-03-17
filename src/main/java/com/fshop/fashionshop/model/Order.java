@@ -5,17 +5,17 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @ToString
 @Entity
-@Table(name="user_order")
+@Table(name = "user_order")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
 
     private Long date;
 
@@ -26,4 +26,8 @@ public class Order {
 
     @OneToOne
     private Product product;
+
+
+    @ManyToOne
+    private User user;
 }

@@ -6,7 +6,6 @@ import com.fshop.fashionshop.model.commons.Stock;
 import com.fshop.fashionshop.model.commons.enums.Currency;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,7 +34,6 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Image> img;
-
 
 
 }

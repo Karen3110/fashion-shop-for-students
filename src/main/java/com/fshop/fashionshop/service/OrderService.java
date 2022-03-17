@@ -1,11 +1,20 @@
 package com.fshop.fashionshop.service;
 
 import com.fshop.fashionshop.model.Order;
-import com.fshop.fashionshop.model.dto.request.OrderUpdateDto;
+import com.fshop.fashionshop.model.Product;
+import com.fshop.fashionshop.model.dto.requestDto.OrderUpdateReqDto;
+
+import java.util.List;
 
 public interface OrderService {
 
-    Order getByID(long id);
+    Order create(Order order);
 
-    Order update(long id, OrderUpdateDto orderUpdateDto);
+    Order getById(long id);
+
+    List<Order> getAll();
+
+    Order update(long id, OrderUpdateReqDto order);
+
+    void delete(long id);
 }
