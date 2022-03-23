@@ -3,12 +3,16 @@ package com.fshop.fashionshop.service.impl;
 import com.fshop.fashionshop.model.User;
 import com.fshop.fashionshop.repository.UserRepository;
 import com.fshop.fashionshop.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired

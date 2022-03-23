@@ -3,6 +3,7 @@ package com.fshop.fashionshop.controller;
 import com.fshop.fashionshop.model.Order;
 import com.fshop.fashionshop.model.dto.requestDto.OrderUpdateReqDto;
 import com.fshop.fashionshop.service.OrderService;
+import com.fshop.fashionshop.validation.UserValidator;
 import com.fshop.fashionshop.validation.dto.OrderDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,11 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    Order getById(@PathVariable long id) {
-        return orderService.getById(id);
+    Order getById(@PathVariable("id") long user_id) {
+        // ete validated exav talisa orderner
+//        else talisa UNOUTHORIEZ ERROR
+        UserValidator.checkUserValidated(user_id);
+        return orderService.getAllById(user_id);
     }
 
     @GetMapping()
