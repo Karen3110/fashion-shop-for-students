@@ -35,7 +35,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "user with id:" + id + "not founded"));
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "user with id:" + id + " not founded"));
+    }
+
+    @Override
+    public User getByIdForSingUp(String id) {
+        return userRepository.getById(id);
     }
 
     /***

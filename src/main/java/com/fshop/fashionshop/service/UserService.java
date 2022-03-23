@@ -11,6 +11,7 @@ public interface UserService {
     User create(User user);
 
     User getById(String id);
+    User getByIdForSingUp(String id);
 
     List<User> getAll();
 
