@@ -6,10 +6,8 @@ import com.fshop.fashionshop.service.ProductService;
 import com.fshop.fashionshop.validation.ProductValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -35,14 +33,8 @@ public class ProductController {
     }
 
 
-    @PostMapping(
-//            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    ResponseEntity<Product> create(@RequestBody Product product, @RequestParam   MultipartFile[] images) {
-
-//        return null;
-
-//        ImageValidator.checkDefaultImage(product);
+    @PostMapping
+    ResponseEntity<Product> create(@RequestBody Product product) {
 
         if (!ProductValidator.validateCreateProduct(product)) {
             throw new ResponseStatusException(
@@ -50,13 +42,7 @@ public class ProductController {
                     "user data is invalid to create product"
             );
         }
-
-        Product productFromDb = productService.create(product);
-
-        productFromDb = imageService.saveImagesToFolder(productFromDb, images);
-
-
-        return ResponseEntity.ok(productService.update(productFromDb.getId(), productFromDb));
+        return ResponseEntity.ok(productService.create(product));
     }
 
     @PutMapping("/{id}")

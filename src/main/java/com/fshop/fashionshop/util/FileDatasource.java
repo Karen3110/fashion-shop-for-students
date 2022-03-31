@@ -1,5 +1,7 @@
 package com.fshop.fashionshop.util;
 
+import com.fshop.fashionshop.model.Product;
+
 import java.io.File;
 import java.nio.file.Path;
 
@@ -21,7 +23,6 @@ public class FileDatasource {
         } else if (dataFolder.exists() && !dataFolder.isDirectory()) {
             dataFolder.mkdir();
         }
-
     }
 
     public String createProductFolder(String folderName) {
@@ -36,6 +37,10 @@ public class FileDatasource {
             imageFolder.mkdir();
         }
         return imageFolder.getPath();
+    }
+
+    public   String getFolderPathByProduct(Product product){
+        return dataFolder.getPath()+File.separator+product.getName()+"_"+product.getId();
     }
 
 
