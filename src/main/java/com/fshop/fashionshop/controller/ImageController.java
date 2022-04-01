@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,12 +23,15 @@ public class ImageController {
         imageService.saveImagesToFolder(productId, multipartFile);
     }
 
-    @GetMapping(value = "/get/{product_id}",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
-    ResponseEntity<List<byte[]>> getImagesByProductId(@PathVariable("product_id") long productId) {
+    @GetMapping(value = "/get/{product_id}/{img_id}")
+    ResponseEntity<byte[]> getImagesByProductId(@PathVariable("product_id") long productId, @PathVariable("img_id") long img_id) throws IOException {
 
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(imageService.readAllByProductId(productId));
-
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(imageService.readAllByProductId(productId,img_id));
     }
+
+
+
 }

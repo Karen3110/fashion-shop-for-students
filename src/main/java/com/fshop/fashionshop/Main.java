@@ -8,6 +8,7 @@ import com.fshop.fashionshop.util.FileDatasource;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ContextPathCompositeHandler;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
@@ -18,13 +19,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-        FileDatasource fileDatasource = new FileDatasource();
-
-        fileDatasource.createProductFolder("product_1");
-        fileDatasource.createProductFolder("product_2");
-        fileDatasource.createProductFolder("product_2");
-        fileDatasource.createProductFolder("product_3");
 
 
 

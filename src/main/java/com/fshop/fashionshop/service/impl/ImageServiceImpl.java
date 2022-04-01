@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,25 +70,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<byte[]> readAllByProductId(long productId) {
+    public byte[] readAllByProductId(long productId, long imgId) throws IOException {
 
-        List<Image> img = productService.getById(productId).getImg();
-        List<byte[]> data = new LinkedList<>();
-
-        img.forEach(item -> {
-            System.out.println(item.getImagePath());
-
-            File file = new File(item.getImagePath());
-            InputStream in = null;
-            try {
-                in = new FileInputStream(file);
-                data.add(in.readAllBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
+        Image image = null;
+        for (Image item : productService.getById(productId).getImg()) {
+            if (item.getId() == imgId) {
+                image = item;
+                break;
             }
-        });
+        }
+        InputStream inputStream = new FileInputStream(new File(image.getImagePath()));
+        return StreamUtils.copyToByteArray(inputStream);
 
-        return data;
     }
 
 
