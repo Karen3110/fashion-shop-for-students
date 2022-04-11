@@ -4,7 +4,9 @@ import com.fshop.fashionshop.model.Order;
 import com.fshop.fashionshop.model.dto.requestDto.OrderUpdateReqDto;
 import com.fshop.fashionshop.service.OrderService;
 import com.fshop.fashionshop.validation.OrderValidator;
+import com.fshop.fashionshop.validation.ProductValidator;
 import com.fshop.fashionshop.validation.UserValidator;
+import com.fshop.fashionshop.validation.ValidationConstants;
 import com.fshop.fashionshop.validation.dto.OrderDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +27,8 @@ public class OrderController {
     @GetMapping("/user-order")
     ResponseEntity<List<Order>> getById(@RequestHeader("user_id") String userId) {
 
-        if (!UserValidator.checkUserAuthorized(userId)) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "user is UNAUTHORIZED, plz SignUp at first"
-            );
-        }
+        UserValidator.checkUserAuthorized(userId, HttpStatus.UNAUTHORIZED, "user is UNAUTHORIZED, plz SignUp at first");
+
         return ResponseEntity.ok(orderService.getAllById(userId));
 
     }
@@ -38,12 +36,10 @@ public class OrderController {
 
     @PostMapping
     ResponseEntity<Order> create(@RequestBody Order order) {
-        if (!OrderValidator.validateOrder(order)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Invalid order Structure for accepting Order"
-            );
-        }
+
+        UserValidator.checkUserAuthorized(order.getUser().getId(), HttpStatus.UNAUTHORIZED, ValidationConstants.UNAUTHORIZED_ERROR);
+        ProductValidator.validateCreateProduct(order.getProduct(), HttpStatus.BAD_REQUEST, ValidationConstants.ORDER_ERROR_PRODUCT);
+        OrderValidator.validateOrder(order, HttpStatus.BAD_REQUEST, "validation for order failed, plz check order description");
 
         return ResponseEntity.ok(orderService.create(order));
 
@@ -58,12 +54,8 @@ public class OrderController {
                     "user data is invalid to update users order"
             );
         }
-        if (!UserValidator.checkUserAuthorized(userId)) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "user is UNAUTHORIZED, plz AUTHORIZE at first"
-            );
-        }
+        UserValidator.checkUserAuthorized(userId, HttpStatus.UNAUTHORIZED, "user is UNAUTHORIZED, plz SignUp at first");
+
         return orderService.update(orderId, reqDto);
     }
 

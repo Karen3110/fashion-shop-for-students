@@ -9,9 +9,9 @@ import java.io.IOException;
 public interface ImageService {
 
 
-    Product saveImagesToFolder(long productId, MultipartFile[] images);
+    Product saveImagesToFolder(long productId, MultipartFile[] images, String imageMappingPath);
 
-    byte[] readAllByProductId(long productId, long imgId) throws IOException;
+    byte[] readByFolderNameAndImageName(String folderName, String imageName) throws IOException;
 
     Image update(MultipartFile file);
 

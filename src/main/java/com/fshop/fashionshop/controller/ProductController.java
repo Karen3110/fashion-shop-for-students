@@ -4,6 +4,8 @@ import com.fshop.fashionshop.model.Product;
 import com.fshop.fashionshop.service.ImageService;
 import com.fshop.fashionshop.service.ProductService;
 import com.fshop.fashionshop.validation.ProductValidator;
+import com.fshop.fashionshop.validation.UserValidator;
+import com.fshop.fashionshop.validation.ValidationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,24 +37,16 @@ public class ProductController {
 
     @PostMapping
     ResponseEntity<Product> create(@RequestBody Product product) {
+        ProductValidator.validateCreateProduct(product, HttpStatus.BAD_REQUEST, "product data is invalid to add in DB");
 
-        if (!ProductValidator.validateCreateProduct(product)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "user data is invalid to create product"
-            );
-        }
         return ResponseEntity.ok(productService.create(product));
     }
 
     @PutMapping("/{id}")
     ResponseEntity<Product> update(@PathVariable long id, @RequestBody Product product) {
-        if (!ProductValidator.validateUpdateProduct(product)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "user data is invalid to update product with id:" + id
-            );
-        }
+        UserValidator.checkUserAuthorized("12345",HttpStatus.UNAUTHORIZED, ValidationConstants.UNAUTHORIZED_ERROR);
+        ProductValidator.validateUpdateProduct(product, HttpStatus.BAD_REQUEST, "products data that you want to update does not matches to the product structure");
+
         return ResponseEntity.ok(productService.update(id, product));
     }
 

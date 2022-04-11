@@ -4,6 +4,7 @@ import com.fshop.fashionshop.model.Product;
 import com.fshop.fashionshop.model.commons.Image;
 import com.fshop.fashionshop.service.ImageService;
 import com.fshop.fashionshop.service.ProductService;
+import com.fshop.fashionshop.util.FileConstants;
 import com.fshop.fashionshop.util.FileDatasource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public Product saveImagesToFolder(long productId, MultipartFile[] images) {
+    public Product saveImagesToFolder(long productId, MultipartFile[] images, String imageMappingPath) {
 // get product by id
         Product product = productService.getById(productId);
         List<Image> imagesForDb = new LinkedList<>();
@@ -49,12 +50,11 @@ public class ImageServiceImpl implements ImageService {
 
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
             Path uploadDirectory = Paths.get(productFolder);
-            String imagePath = productFolder + File.separator + fileName;
-            System.out.println("imagePath\t" + imagePath);
-            imagesForDb.add(new Image(imagePath));
+            String imgUrl = imageMappingPath + '/' + generateFolderName(product) + '/' + fileName;
+            System.out.println("imagePath\t" + imgUrl);
+            imagesForDb.add(new Image(imgUrl));
             try (InputStream inputStream = image.getInputStream()) {
                 Path filePath = uploadDirectory.resolve(fileName);
-
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 try {
@@ -70,16 +70,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] readAllByProductId(long productId, long imgId) throws IOException {
+    public byte[] readByFolderNameAndImageName(String folderName, String imageName) throws IOException {
 
-        Image image = null;
-        for (Image item : productService.getById(productId).getImg()) {
-            if (item.getId() == imgId) {
-                image = item;
-                break;
-            }
-        }
-        InputStream inputStream = new FileInputStream(new File(image.getImagePath()));
+        File file = new File(
+                new File("").getAbsolutePath() +
+                        File.separator +
+                        FileConstants.DATA_FOLDER_NAME +
+                        File.separator +
+                        folderName +
+                        File.separator +
+                        imageName);
+
+        InputStream inputStream = new FileInputStream(file);
         return StreamUtils.copyToByteArray(inputStream);
 
     }

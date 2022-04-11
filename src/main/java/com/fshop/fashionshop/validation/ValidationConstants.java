@@ -7,4 +7,10 @@ public class ValidationConstants {
     public static final int PRODUCT_DESCRIPTION_MIN_LENGTH = 5;
     public static final int PRODUCT_DESCRIPTION_MAX_LENGTH = 255;
 
+
+
+
+    public static final String UNAUTHORIZED_ERROR = "User data is unauthorized plz sign in First";
+    public static final String ORDER_ERROR_PRODUCT = "product data is invalid to register order";
+
 }
