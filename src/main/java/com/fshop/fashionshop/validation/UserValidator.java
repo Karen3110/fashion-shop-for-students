@@ -24,9 +24,14 @@ public final class UserValidator {
 
 
     public static void checkUserAuthorized(String user_id, HttpStatus status, String message) {
-        if (user_id == null || userService.getById(user_id) == null) {
-            throw new ResponseStatusException(status, message);
-        }
+       try{
+           if (user_id == null || userService.getById(user_id) == null) {
+               throw new ResponseStatusException(status, message);
+           }
+       }catch (ResponseStatusException statusException){
+           throw new ResponseStatusException(status,message);
+       }
+
     }
 
     public static void checkUserSignUp(User user, HttpStatus status, String message) {

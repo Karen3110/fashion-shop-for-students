@@ -37,6 +37,7 @@ public class ProductController {
 
     @PostMapping
     ResponseEntity<Product> create(@RequestBody Product product) {
+//        UserValidator.checkUserAuthorized("1234",HttpStatus.UNAUTHORIZED, ValidationConstants.UNAUTHORIZED_ERROR);
         ProductValidator.validateCreateProduct(product, HttpStatus.BAD_REQUEST, "product data is invalid to add in DB");
 
         return ResponseEntity.ok(productService.create(product));

@@ -1,6 +1,7 @@
 package com.fshop.fashionshop.controller;
 
 import com.fshop.fashionshop.model.Order;
+import com.fshop.fashionshop.model.commons.enums.OrderStatus;
 import com.fshop.fashionshop.model.dto.requestDto.OrderUpdateReqDto;
 import com.fshop.fashionshop.service.OrderService;
 import com.fshop.fashionshop.validation.OrderValidator;
@@ -26,23 +27,29 @@ public class OrderController {
 
     @GetMapping("/user-order")
     ResponseEntity<List<Order>> getById(@RequestHeader("user_id") String userId) {
-
         UserValidator.checkUserAuthorized(userId, HttpStatus.UNAUTHORIZED, "user is UNAUTHORIZED, plz SignUp at first");
-
         return ResponseEntity.ok(orderService.getAllById(userId));
 
     }
 
-
     @PostMapping
     ResponseEntity<Order> create(@RequestBody Order order) {
-
         UserValidator.checkUserAuthorized(order.getUser().getId(), HttpStatus.UNAUTHORIZED, ValidationConstants.UNAUTHORIZED_ERROR);
         ProductValidator.validateCreateProduct(order.getProduct(), HttpStatus.BAD_REQUEST, ValidationConstants.ORDER_ERROR_PRODUCT);
-        OrderValidator.validateOrder(order, HttpStatus.BAD_REQUEST, "validation for order failed, plz check order description");
 
+        OrderValidator.validateOrder(order, HttpStatus.BAD_REQUEST, "validation for order failed, plz check order description");
         return ResponseEntity.ok(orderService.create(order));
 
+    }
+
+    @PutMapping("/change-status/{order_id}/{status}")
+    ResponseEntity<String> changeStatus(@RequestHeader("user_id") String userId,
+                                        @PathVariable("order_id") Long orderId,
+                                        @PathVariable("status") OrderStatus orderStatus) {
+        UserValidator.checkUserAuthorized(userId, HttpStatus.BAD_REQUEST, "user is unauthorized");
+        OrderValidator.validateOrderChangeStatus(orderService.getOrderById(orderId),orderStatus, HttpStatus.BAD_REQUEST, "products in stock is not available or the count is not enough!");
+        orderService.changeStatus(orderId, orderStatus);
+        return ResponseEntity.ok("updated, chek product with id " + orderId);
     }
 
 
